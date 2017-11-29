@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JamZoo @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div  class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("行銷追蹤管理系統", "UserList_All", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("所有會員", "UserList_All", "Admin")</li>
+                    <li>@Html.ActionLink("推廣紀錄", "RecordList_All", "Admin")</li>
+                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @{ 
+                            if (Request.Cookies["AdminID"]!=null)
+                            {
+                                @Html.ActionLink("登出", "AdminLogout","Admin",null, new { @class = "glyphicon glyphicon-log-out" })
+                            }
+                        }
+                    </li>
+                </ul>
+            </div>
+            @*<div class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>Test</li>
+                </ul>
+            </div>*@
+        </div>
+    </div>
+
+    <div class="container body-content">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <br />
+                <br />
+                <div>@Html.ActionLink("警察在哪裡", "EventCount", "Admin")</div>
+                <div>@Html.ActionLink("行銷活動NO.2", "UserList_All", "Admin")</div>
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-10">
+                @RenderBody()
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - JamZoo科技．行銷追蹤管理系統</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <hr />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<JamZoo_MarketingTracking.Entities.User>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "所有會員";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section scripts{
+    <script>
+        $("#BtnSearch").click(function () {
+            var StrLink = "@Url.Action("UserList_All","Admin")";
+            StrLink += "?KeyWordSearch=" + $("#KeyWordSearch").val();
+            $(this).attr("href", StrLink);
+        })
+    </script>
+    }
+
+<h2 style="font-family:'Microsoft JhengHei';font-weight:bold;font-size:24px;"><span style="color:orangered">所有會員</span></h2>
+<div>
+    <div class="list-group-item list-group-item-success" style="background-color:#BBFFEE">
+                <label for="KeyWordSearch">關鍵字搜尋</label>
+                <input id="KeyWordSearch" name="KeyWordSearch" type="text"/>
+                <a id="BtnSearch" class="btn btn-warning"><span class="glyphicon glyphicon-search"></span>搜尋</a></>
+    </div>
+    <div>
+        @Html.PagedListPager((IPagedList)Model, r => Url.Action("UserList_All", "Admin", new { page = r, sortBy = Request.QueryString["sortBy"], KeyWordSearch = ViewBag.SreachbyKeyWord }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+
+    <div class="row">
+        <div>
+            <table class="table table-hover table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>@Html.ActionLink("會員姓名", "UserList_All", "Admin", new { sortBy = ViewBag.SortByUserName }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("手機", "UserList_All", "Admin", new { sortBy = ViewBag.SortByPhone }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("Email", "UserList_All", "Admin", new { sortBy = ViewBag.SortByEmail }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("註冊時間", "UserList_All", "Admin", new { sortBy = ViewBag.SortByCreateTime }, new { @class = "text-info" })</th>
+                        <th>查看</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Phone</td>
+                            <td style="word-wrap:break-word;word-break:break-all; white-space: normal">@user.Email</td>
+                            <td>@user.CreateDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        @Html.PagedListPager((IPagedList)Model, r => Url.Action("UserList_All", "Admin", new { page = r, sortBy = Request.QueryString["sortBy"], KeyWordSearch = ViewBag.SreachbyKeyWord }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+</div>
+

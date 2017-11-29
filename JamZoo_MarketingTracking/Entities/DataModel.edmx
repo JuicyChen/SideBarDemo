@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="JamZooAdmin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdminName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdminPassword" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MarketingEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AndroidUrl" Type="nvarchar(max)" />
+          <Property Name="AndroidCount" Type="int" />
+          <Property Name="IosUrl" Type="nvarchar(max)" />
+          <Property Name="IosCount" Type="int" />
+        </EntityType>
+        <EntityType Name="PromotionLog">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+          </Key>
+          <Property Name="PromotionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="EventID" Type="int" Nullable="false" />
+          <Property Name="Platform" Type="nvarchar" MaxLength="50" />
+          <Property Name="Datetime" Type="datetime" />
+          <Property Name="FingerPrint" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="BankNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="Captcha1" Type="nvarchar" MaxLength="50" />
+          <Property Name="Captcha2" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User_MarketingEvent">
+          <Key>
+            <PropertyRef Name="UserEventID" />
+          </Key>
+          <Property Name="UserEventID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="EventID" Type="int" Nullable="false" />
+          <Property Name="UserAppLink" Type="nvarchar(max)" />
+          <Property Name="UserAndroidUrl" Type="nvarchar(max)" />
+          <Property Name="UserAndroidCount" Type="int" />
+          <Property Name="UserIosUrl" Type="nvarchar(max)" />
+          <Property Name="UserIosCount" Type="int" />
+        </EntityType>
+        <Association Name="FK_PromotionLog_MarketingEvent">
+          <End Role="MarketingEvent" Type="Self.MarketingEvent" Multiplicity="1" />
+          <End Role="PromotionLog" Type="Self.PromotionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="PromotionLog">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PromotionLog_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="PromotionLog" Type="Self.PromotionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PromotionLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_MarketingEvent_MarketingEvent">
+          <End Role="MarketingEvent" Type="Self.MarketingEvent" Multiplicity="1" />
+          <End Role="User_MarketingEvent" Type="Self.User_MarketingEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="User_MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_MarketingEvent_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_MarketingEvent" Type="Self.User_MarketingEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="User_MarketingEvent">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DataModelStoreContainer">
+          <EntitySet Name="JamZooAdmin" EntityType="Self.JamZooAdmin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketingEvent" EntityType="Self.MarketingEvent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PromotionLog" EntityType="Self.PromotionLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_MarketingEvent" EntityType="Self.User_MarketingEvent" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PromotionLog_MarketingEvent" Association="Self.FK_PromotionLog_MarketingEvent">
+            <End Role="MarketingEvent" EntitySet="MarketingEvent" />
+            <End Role="PromotionLog" EntitySet="PromotionLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PromotionLog_User" Association="Self.FK_PromotionLog_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PromotionLog" EntitySet="PromotionLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_MarketingEvent_MarketingEvent" Association="Self.FK_User_MarketingEvent_MarketingEvent">
+            <End Role="MarketingEvent" EntitySet="MarketingEvent" />
+            <End Role="User_MarketingEvent" EntitySet="User_MarketingEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_MarketingEvent_User" Association="Self.FK_User_MarketingEvent_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_MarketingEvent" EntitySet="User_MarketingEvent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="JamZooMETrackingSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="JamZooAdmin" EntityType="DataModel.JamZooAdmin" />
+          <EntitySet Name="MarketingEvent" EntityType="DataModel.MarketingEvent" />
+          <EntitySet Name="User" EntityType="DataModel.User" />
+          <EntitySet Name="User_MarketingEvent" EntityType="DataModel.User_MarketingEvent" />
+          <AssociationSet Name="FK_User_MarketingEvent_MarketingEvent" Association="DataModel.FK_User_MarketingEvent_MarketingEvent">
+            <End Role="MarketingEvent" EntitySet="MarketingEvent" />
+            <End Role="User_MarketingEvent" EntitySet="User_MarketingEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_MarketingEvent_User" Association="DataModel.FK_User_MarketingEvent_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_MarketingEvent" EntitySet="User_MarketingEvent" />
+          </AssociationSet>
+          <EntitySet Name="PromotionLog" EntityType="DataModel.PromotionLog" />
+          <AssociationSet Name="FK_PromotionLog_MarketingEvent" Association="DataModel.FK_PromotionLog_MarketingEvent">
+            <End Role="MarketingEvent" EntitySet="MarketingEvent" />
+            <End Role="PromotionLog" EntitySet="PromotionLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PromotionLog_User" Association="DataModel.FK_PromotionLog_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PromotionLog" EntitySet="PromotionLog" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="JamZooAdmin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdminName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdminPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MarketingEvent">
+          <Key>
+            <PropertyRef Name="EventID" />
+          </Key>
+          <Property Name="EventID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AndroidUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AndroidCount" Type="Int32" />
+          <Property Name="IosUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IosCount" Type="Int32" />
+          <NavigationProperty Name="User_MarketingEvent" Relationship="DataModel.FK_User_MarketingEvent_MarketingEvent" FromRole="MarketingEvent" ToRole="User_MarketingEvent" />
+          <NavigationProperty Name="PromotionLog" Relationship="DataModel.FK_PromotionLog_MarketingEvent" FromRole="MarketingEvent" ToRole="PromotionLog" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="BankNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Captcha1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Captcha2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_MarketingEvent" Relationship="DataModel.FK_User_MarketingEvent_User" FromRole="User" ToRole="User_MarketingEvent" />
+          <NavigationProperty Name="PromotionLog" Relationship="DataModel.FK_PromotionLog_User" FromRole="User" ToRole="PromotionLog" />
+        </EntityType>
+        <EntityType Name="User_MarketingEvent">
+          <Key>
+            <PropertyRef Name="UserEventID" />
+          </Key>
+          <Property Name="UserEventID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="EventID" Type="Int32" Nullable="false" />
+          <Property Name="UserAppLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserAndroidUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserAndroidCount" Type="Int32" />
+          <Property Name="UserIosUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserIosCount" Type="Int32" />
+          <NavigationProperty Name="MarketingEvent" Relationship="DataModel.FK_User_MarketingEvent_MarketingEvent" FromRole="User_MarketingEvent" ToRole="MarketingEvent" />
+          <NavigationProperty Name="User" Relationship="DataModel.FK_User_MarketingEvent_User" FromRole="User_MarketingEvent" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_MarketingEvent_MarketingEvent">
+          <End Type="DataModel.MarketingEvent" Role="MarketingEvent" Multiplicity="1" />
+          <End Type="DataModel.User_MarketingEvent" Role="User_MarketingEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="User_MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_MarketingEvent_User">
+          <End Type="DataModel.User" Role="User" Multiplicity="1" />
+          <End Type="DataModel.User_MarketingEvent" Role="User_MarketingEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="User_MarketingEvent">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PromotionLog">
+          <Key>
+            <PropertyRef Name="PromotionID" />
+          </Key>
+          <Property Name="PromotionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="EventID" Type="Int32" Nullable="false" />
+          <Property Name="Platform" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Datetime" Type="DateTime" Precision="3" />
+          <Property Name="FingerPrint" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MarketingEvent" Relationship="DataModel.FK_PromotionLog_MarketingEvent" FromRole="PromotionLog" ToRole="MarketingEvent" />
+          <NavigationProperty Name="User" Relationship="DataModel.FK_PromotionLog_User" FromRole="PromotionLog" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PromotionLog_MarketingEvent">
+          <End Type="DataModel.MarketingEvent" Role="MarketingEvent" Multiplicity="1" />
+          <End Type="DataModel.PromotionLog" Role="PromotionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarketingEvent">
+              <PropertyRef Name="EventID" />
+            </Principal>
+            <Dependent Role="PromotionLog">
+              <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PromotionLog_User">
+          <End Type="DataModel.User" Role="User" Multiplicity="1" />
+          <End Type="DataModel.PromotionLog" Role="PromotionLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PromotionLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DataModelStoreContainer" CdmEntityContainer="JamZooMETrackingSystemEntities">
+          <EntitySetMapping Name="JamZooAdmin">
+            <EntityTypeMapping TypeName="DataModel.JamZooAdmin">
+              <MappingFragment StoreEntitySet="JamZooAdmin">
+                <ScalarProperty Name="AdminPassword" ColumnName="AdminPassword" />
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketingEvent">
+            <EntityTypeMapping TypeName="DataModel.MarketingEvent">
+              <MappingFragment StoreEntitySet="MarketingEvent">
+                <ScalarProperty Name="IosCount" ColumnName="IosCount" />
+                <ScalarProperty Name="IosUrl" ColumnName="IosUrl" />
+                <ScalarProperty Name="AndroidCount" ColumnName="AndroidCount" />
+                <ScalarProperty Name="AndroidUrl" ColumnName="AndroidUrl" />
+                <ScalarProperty Name="EventName" ColumnName="EventName" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="DataModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Captcha2" ColumnName="Captcha2" />
+                <ScalarProperty Name="Captcha1" ColumnName="Captcha1" />
+                <ScalarProperty Name="BankAccount" ColumnName="BankAccount" />
+                <ScalarProperty Name="BankNumber" ColumnName="BankNumber" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_MarketingEvent">
+            <EntityTypeMapping TypeName="DataModel.User_MarketingEvent">
+              <MappingFragment StoreEntitySet="User_MarketingEvent">
+                <ScalarProperty Name="UserIosCount" ColumnName="UserIosCount" />
+                <ScalarProperty Name="UserIosUrl" ColumnName="UserIosUrl" />
+                <ScalarProperty Name="UserAndroidCount" ColumnName="UserAndroidCount" />
+                <ScalarProperty Name="UserAndroidUrl" ColumnName="UserAndroidUrl" />
+                <ScalarProperty Name="UserAppLink" ColumnName="UserAppLink" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserEventID" ColumnName="UserEventID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PromotionLog">
+            <EntityTypeMapping TypeName="DataModel.PromotionLog">
+              <MappingFragment StoreEntitySet="PromotionLog">
+                <ScalarProperty Name="FingerPrint" ColumnName="FingerPrint" />
+                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="EventID" ColumnName="EventID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

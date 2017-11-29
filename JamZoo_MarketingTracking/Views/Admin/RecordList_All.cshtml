@@ -1,0 +1,63 @@
+﻿@model IEnumerable<JamZoo_MarketingTracking.ViewModels.RecordViewModel>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "連結推廣紀錄";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section scripts{
+    <script>
+        $("#BtnSearch").click(function () {
+            var StrLink = "@Url.Action("RecordList_All","Admin")";
+            StrLink += "?KeyWordSearch=" + $("#KeyWordSearch").val();
+            $(this).attr("href", StrLink);
+        })
+    </script>
+}
+
+<h2 style="font-family:'Microsoft JhengHei';font-weight:bold;font-size:24px;"><span style="color:orangered">連結推廣紀錄</span></h2>
+<div class="list-group-item list-group-item-success" style="background-color:#BBFFEE">
+    <label for="KeyWordSearch">關鍵字搜尋</label>
+    <input id="KeyWordSearch" name="KeyWordSearch" type="text" />
+    <a id="BtnSearch" class="btn btn-warning"><span class="glyphicon glyphicon-search"></span>搜尋</a></>
+</div>
+
+<div>
+    <div>
+        @Html.PagedListPager((IPagedList)Model, r => Url.Action("RecordList_All", "Admin", new { page = r, sortBy = Request.QueryString["sortBy"], KeyWordSearch = ViewBag.SreachbyKeyWord }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+    <div class="row">
+        <div>
+            <table class="table table-hover table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>@Html.ActionLink("專案/行銷活動", "RecordList_All","Admin",new { sortBy=ViewBag.SortByEventName}, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("連結來源", "RecordList_All", "Admin", new { sortBy = ViewBag.SortByUserName }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("平台", "RecordList_All", "Admin", new { sortBy = ViewBag.SortByPlatform }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("點擊時間", "RecordList_All", "Admin", new { sortBy = ViewBag.SortByClickTime }, new { @class = "text-info" })</th>
+                        <th>@Html.ActionLink("點擊者FingerPrint", "RecordList_All", "Admin", new { sortBy = ViewBag.SortByFingerPrint }, new { @class = "text-info" })</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var record in Model)
+                    {
+                        <tr>
+                            <td>@record.EventName</td>
+                            <td>@record.UserName</td>
+                            <td>@record.Platform</td>
+                            <td>@record.Datetime</td>
+                            <td>@record.FingerPrint</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        @Html.PagedListPager((IPagedList)Model,r=> Url.Action("RecordList_All","Admin", new { page = r, sortBy = Request.QueryString["sortBy"], KeyWordSearch = ViewBag.SreachbyKeyWord }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+</div>
+

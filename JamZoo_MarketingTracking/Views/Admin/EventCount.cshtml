@@ -1,0 +1,36 @@
+﻿@model IEnumerable<JamZoo_MarketingTracking.ViewModels.UserViewModel>
+
+@{
+    ViewBag.Title = "警察在哪裡 次數統計";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 style="font-family:'Microsoft JhengHei';font-weight:bold;font-size:24px;"><span style="color:orangered">會員:警察在哪裡</span></h2>
+<div class="row">
+    <div>
+        <table class="table table-hover table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(user=>user.UserName)</th>
+                    <th>@Html.DisplayNameFor(user => user.Phone)</th>
+                    <th>@Html.DisplayNameFor(user => user.Email)</th>
+                    <th>@Html.DisplayNameFor(user => user.UserAndroidCount)</th>
+                    <th>@Html.DisplayNameFor(user => user.UserIosCount)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Phone</td>
+                        <td>@user.Email</td>
+                        <td>@user.UserAndroidCount</td>
+                        <td>@user.UserIosCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
